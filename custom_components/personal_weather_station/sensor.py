@@ -66,6 +66,7 @@ class PwsSensor(SensorEntity):
         _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class).
     """
 
+
     def __init__(self, device: PwsDevice, key: str):
         """
         Initialize the sensor entity.
@@ -120,6 +121,10 @@ class PwsSensor(SensorEntity):
     @property
     def device_class(self):
         return self._meta.get("device_class")
+
+    #@property
+    #def entity_registry_enabled_default(self):
+    #    return self._meta.get("enabled", True)
 
     @property
     def should_poll(self):
