@@ -48,6 +48,15 @@ The following personal weather stations have been confirmed to work with this in
 - **Bresser 7-in-1 Weather Station**
   - 7002586
   - 7002582
+  - 7002620 
+  - 7003300
+  - 7003400
+  - 7004406
+
+> [!IMPORTANT]  
+> Bresser weather stations running firmware version **3.02** or later require SSL.
+> With these versions, using HTTP will cause a silent failure, meaning no data will be transmitted.
+> Home Assistant must therefore be configured with SSL enabled, and the URL configured in WSLink must use https instead of http.
 
 Other stations may also work if they can send HTTP GET requests with query parameters matching the keys defined in `SENSOR_LIST`.  
 Feel free to try your own weather station and see if it works, and consider contributing any new compatible models to the project!
@@ -83,11 +92,13 @@ This integration is compatible with HACS as a **custom repository** and can be a
 
 ### Manual configuration
 
-**Important:** In your weather station configuration, make sure to set the URL to point to your Home Assistant instance:  
+Set at least these parameters :
 
-```
-http://<home_assistant_ip>:8123
-```
+- **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
+- **ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
+- **Station Key**: a password known only to you (required)
+
+**Important** : In your weather station configuration, make sure to set the URL to point to your Home Assistant instance
 
 #### HTTP Endpoint
 
@@ -100,10 +111,11 @@ http://<home_assistant_ip>:8123/weatherstation/updateweatherstation.php
 Query parameters format:
 
 ```
-?ID=<device_id>&temperature=22.5&humidity=55
+?ID=<device_id>&PASSWORD=<password>&temperature=22.5&humidity=55
 ```
 
-- `ID`: Unique device ID (required).  
+- `ID`: Unique device ID (required).
+- `PASSWORD`: a password known only to you (required)
 - Other parameters: Sensor keys matching `SENSOR_LIST`.
 
 ### WSLink configuration
@@ -112,14 +124,13 @@ Make sure to set these parameters in the WSLink application:
 
 - **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
 - **Sender ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
-- **Station Key**: you can leave it blank (not used)
+- **Station Key**: a password known only to you (required)
 - **Upload** Interval: any interval you want, e.g., 60 seconds
 
 This configuration will allow WSLink to send weather data correctly to Home Assistant via the PWS integration.
 
 ### Config Flow
-
-- This integration **does not support the UI config flow** (`config_flow: false`).  
+- Add a new weather station using its station key. Ensure that this key matches the one configured in the weather station settings.
 - All setup is done automatically upon HTTP requests.
 
 ---
@@ -134,7 +145,7 @@ This configuration will allow WSLink to send weather data correctly to Home Assi
 ### Example HTTP Request
 
 ```text
-http://192.168.1.23:8123/weatherstation/updateweatherstation.php?ID=my_station&temperature=22.5&humidity=55
+http://192.168.1.23:8123/weatherstation/updateweatherstation.php?ID=my_station&PASSWORD=<password>&temperature=22.5&humidity=55
 ```
 
 - Creates/updates sensors `temperature` and `humidity` for device `my_station`.
@@ -173,7 +184,8 @@ When a value is received from the weather station, the integration automatically
 
 This ensures that each entity always reflects the last received value in the appropriate type, while preserving non-numeric values as strings.
 
-**Note:** This integration does not perform unit conversions itself. All values are stored as received in Weather Underground format (°F, mph, inHg, inches), and Home Assistant handles any necessary conversion to metric units if your system is configured in metric mode
+> [!NOTE] 
+> This integration does not perform unit conversions itself. All values are stored as received in Weather Underground format (°F, mph, inHg, inches), and Home Assistant handles any necessary conversion to metric units if your system is configured in metric mode
 
 ---
 
