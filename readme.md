@@ -58,6 +58,23 @@ Feel free to try your own weather station and see if it works, and consider cont
 
 ---
 
+## Quick Start Guide for Bresser Stations with WSLink App
+
+1.  **Install the Integration:** Follow the HACS or Manual installation steps below.
+2.  **Add the Integration in Home Assistant:** Go to **Settings → Devices & Services → Add Integration** and search for "Personal Weather Station".
+3.  **Configure the Integration:** Enter a **Station Key** (like a password). You will need this for the WSLink app.
+4.  **Configure the WSLink App:**
+    *   **URL**: Your Home Assistant URL (e.g., `https://my-home-assistant.duckdns.org` or `http://192.168.1.100:8123`).
+    *   **Sender ID**: A unique name for your station (e.g., `bresser_station`).
+    *   **Station Key**: The same key you entered in the Home Assistant integration.
+    *   **API Type**: Select **"WUnderground API"**.
+    *   **Upload Interval**: Set your desired update frequency (e.g., 60 seconds).
+5.  **Done!** Your weather station data should now appear as a new device in Home Assistant.
+
+> [!IMPORTANT]  
+> Bresser stations support either HTTP or HTTPS. If your connection fails, switch to the alternative protocol and update your URL in the WSLink App accordingly.
+---
+
 ## Installation
 
 ### Manual Installation
